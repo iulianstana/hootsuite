@@ -1,5 +1,6 @@
 import praw
 import time
+import json
 
 
 class RedditWrapper:
@@ -69,7 +70,9 @@ class RedditWrapper:
 
 
 if __name__ == "__main__":
-    reddit = RedditWrapper('python', 900)
-    reddit.save_subreddit_data()
-    reddit = RedditWrapper('OnePiece', 900)
-    reddit.save_subreddit_data()
+    with open('subreddits.json') as json_file:
+        subreddits = json.load(json_file)
+        for subreddit in subreddits['subreddits']:
+            print "%s" % subreddit
+            reddit = RedditWrapper(subreddit, 900)
+            reddit.save_subreddit_data()
