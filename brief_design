@@ -1,0 +1,21 @@
+The Hootsuite Challenge
+
+Design a small system that parses live data.
+Stores it in a database and exposes it with filtering capabilities through an
+HTTP API.
+
+Use python to manipulate data from Reddit. Save it in mongo DB and use flask
+to exposes it.
+
+Create a small reddit wrapper that connects to a specific subreddit and extract
+the newest submissions and comments.
+
+Create a mongo DB wrapper that helps the save process.
+
+Create a long-running python script that will periodically interrogate reddit for
+the newest data. This script will run in background as a demon process, while
+the flask server and mongoDB servers are up.
+
+Create a flask server that exposes  a GET method for:
+
+/items/?subreddit=<subreddit>&from=<t1>&to=<t2>
