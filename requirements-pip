@@ -1,0 +1,4 @@
+# Usage pip install  -r requirements-pip
+flask
+praw
+pymongo
