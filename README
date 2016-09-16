@@ -1,0 +1,11 @@
+Prerequisites
+
+Need to have python2.9+ installed.
+MangoDB server need to be installed and opened.
+
+Install requirements for this project in a virtual environment.
+    $ virtualenv --python=/usr/local/lib/python2.7.9/bin/python pybox
+    # activate virtual environment
+    $ source pybox/bin/activate
+    # install requirements from requirements-pip
+    $ pip install  -r requirements-pip
