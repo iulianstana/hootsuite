@@ -58,7 +58,7 @@ def update_reddit_time(db, subreddit, submission_t=None, comment_t=None):
             reddit_setting['times']['submission'] = submission_t
         if comment_t:
             reddit_setting['times']['comment'] = comment_t
-        db.dynamic_settings.update({'subreddit': subreddit}, reddit_setting)
+        db.dynamic_settings.replace_one({'subreddit': subreddit}, reddit_setting)
     except Exception as _:
         # probably given subreddit doesn't exist in our database
         # create new dynamic setting for this new subreddit
