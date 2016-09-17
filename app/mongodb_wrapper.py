@@ -92,6 +92,23 @@ def get_reddit_time(db, subreddit, time_type):
     return reddit_setting['times'][time_type]
 
 
+def insert_new_items(db, new_items):
+    """
+    Insert new items in database for a specific subreddit
+    :param db: mongo database object
+    :param new_items: list of new items to be inserted (list)
+    :return: boolean value (True the insert was done | False otherwise)
+    """
+    result = False
+    try:
+        if new_items:
+            db.items.insert_many(new_items)
+            result = True
+    except AttributeError as exp:
+        print exp
+    return result
+
+
 if __name__ == "__main__":
     db_connection = connect_database()
     update_reddit_time(db_connection, 'python', 3000, 3000)
