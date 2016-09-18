@@ -4,16 +4,17 @@ import time
 DATABASE_NAME = 'hootsuite-challenge'
 
 
-def connect_database(server='localhost', port=27017):
+def connect_database(server='localhost', port=27017, database_name=DATABASE_NAME):
     """
     Connect to mongo database.
 
     :param server: mongo server host name (string)
     :param port: listening port of mongo server (integer)
+    :param database_name: name of the database in use (string)
     :return: database object
     """
     client = MongoClient(server, port)
-    return client[DATABASE_NAME]
+    return client[database_name]
 
 
 def insert_new_setting(db, subreddit, submission_t=None, comment_t=None):

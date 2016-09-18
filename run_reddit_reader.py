@@ -3,6 +3,10 @@ import time
 
 from app.mongodb_wrapper import connect_database, reset_reddit_time
 from app.reddit_wrapper import RedditWrapper
+from config import JSON_PATH, \
+                   MONGO_SERVER, \
+                   MONGO_PORT, \
+                   DATABASE_NAME
 
 
 def read_json_file(path):
@@ -55,10 +59,12 @@ def run_reader(db, subreddits):
 
 
 if __name__ == "__main__":
-    subreddits_list = read_json_file("app/subreddits.json")
+    subreddits_list = read_json_file(JSON_PATH)
 
     # connect to database and reset the last update times
-    db_connection = connect_database("localhost", 27017)
+    db_connection = connect_database(server=MONGO_SERVER,
+                                     port=MONGO_PORT,
+                                     database_name=DATABASE_NAME)
     reset_subreddit_times(db_connection, subreddits_list)
 
     # start periodically fetching
