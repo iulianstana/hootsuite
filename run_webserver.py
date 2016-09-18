@@ -22,14 +22,17 @@ def not_found(error):
     return make_response(jsonify({'error': 'Not found'}), 404)
 
 
-def get_items_from_database(subreddit, start_time, end_time):
+def get_items_from_database(subreddit, start_time, end_time, keyword):
     """
     Get items from database, manipulate them and pass them
     further.
+    Keyword parameter can be used to add an additional search
+    level to search in comments or title after a specific keyword
 
     :param subreddit: subreddit name used for search (string)
     :param start_time: item created start time (integer)
     :param end_time: item created end time (integer)
+    :param keyword: used to search after a specific key (string)
     :return: list of items
     """
     # get a database connection
@@ -41,6 +44,9 @@ def get_items_from_database(subreddit, start_time, end_time):
                     "created": {"$gte": start_time,
                                 "$lte": end_time}
                     }
+    if keyword:
+        search_field["$or"] = [{"title": {"$regex": keyword}},
+                               {"comment": {"$regex": keyword}}]
 
     for item in db.items.find(search_field)\
                         .sort("created", pymongo.DESCENDING):
@@ -65,6 +71,7 @@ def get_items():
     subreddit = request.args.get('subreddit')
     start_time = request.args.get('from')
     end_time = request.args.get('to')
+    keyword = request.args.get('keyword')
 
     if subreddit is None or start_time is None or end_time is None:
         abort(400)
@@ -74,7 +81,7 @@ def get_items():
     except ValueError as _:
         abort(400)
 
-    items = get_items_from_database(subreddit, start_time, end_time)
+    items = get_items_from_database(subreddit, start_time, end_time, keyword)
 
     return jsonify(items)
 
