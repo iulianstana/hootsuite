@@ -6,7 +6,8 @@ from app.reddit_wrapper import RedditWrapper
 from config import JSON_PATH, \
                    MONGO_SERVER, \
                    MONGO_PORT, \
-                   DATABASE_NAME
+                   DATABASE_NAME, \
+                   WAIT_TIME
 
 
 def read_json_file(path):
@@ -48,7 +49,7 @@ def run_reader(db, subreddits):
     if subreddits_list:
         while True:
             # times are restarted, start with a wait
-            time.sleep(300)
+            time.sleep(WAIT_TIME)
 
             for subreddit in subreddits:
                 print "%s" % subreddit
