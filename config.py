@@ -6,3 +6,6 @@ MONGO_SERVER = "localhost"
 MONGO_PORT = 27017
 
 DATABASE_NAME = "hootsuite-challenge"
+
+WEB_SERVER = "localhost"
+WEB_PORT = 5000
