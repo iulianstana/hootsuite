@@ -35,19 +35,21 @@ class RedditWrapper:
         :return a list of all new submissions
         """
         new_submissions = []
-        submission_gen = self.reddit_obj.get_subreddit(self.subreddit)\
-                                        .get_new(limit=None)
+        try:
+            submission_gen = self.reddit_obj.get_subreddit(self.subreddit)\
+                                            .get_new(limit=None)
 
-        for submission in submission_gen:
-            if submission.created_utc < self.time_period:
-                break
-            new_submissions.append({
-                'created': submission.created_utc,
-                'title': submission.title,
-                'type': 'submission',
-                'subreddit': self.subreddit
-            })
-
+            for submission in submission_gen:
+                if submission.created_utc < self.time_period:
+                    break
+                new_submissions.append({
+                    'created': submission.created_utc,
+                    'title': submission.title,
+                    'type': 'submission',
+                    'subreddit': self.subreddit
+                })
+        except praw.errors.InvalidSubreddit:
+            print "no results"
         return new_submissions
 
     def fetch_comments(self):
@@ -57,17 +59,20 @@ class RedditWrapper:
         :return a list of all new comments
         """
         new_comments = []
-        comments_gen = self.reddit_obj.get_comments(self.subreddit)
+        try:
+            comments_gen = self.reddit_obj.get_comments(self.subreddit)
 
-        for comment in comments_gen:
-            if comment.created_utc < self.time_period:
-                break
-            new_comments.append({
-                'created': comment.created_utc,
-                'comment': comment.body,
-                'type': 'comment',
-                'subreddit': self.subreddit
-            })
+            for comment in comments_gen:
+                if comment.created_utc < self.time_period:
+                    break
+                new_comments.append({
+                    'created': comment.created_utc,
+                    'comment': comment.body,
+                    'type': 'comment',
+                    'subreddit': self.subreddit
+                })
+        except praw.errors.InvalidSubreddit:
+            print "no results"
         return new_comments
 
     def print_subreddit_data(self):
