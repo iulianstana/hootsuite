@@ -1,5 +1,6 @@
 import json
 import time
+import datetime
 
 from app.mongodb_wrapper import connect_database, reset_reddit_time
 from app.reddit_wrapper import RedditWrapper
@@ -52,7 +53,8 @@ def run_reader(db, subreddits):
             time.sleep(WAIT_TIME)
 
             for subreddit in subreddits:
-                print "%s" % subreddit
+                print "[%s] Start fetching ... '%s'" % (datetime.datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S"),
+                                                        subreddit)
                 reddit = RedditWrapper(subreddit, db=db)
                 reddit.save_subreddit_data()
     else:
