@@ -9,4 +9,4 @@ WORKDIR /opt/reddit_reader
 RUN pip install -r requirements-pip
 
 # start script
-CMD [ "python", "./run_reddit_reader.py" ]
+CMD [ "python", "-u", "./run_reddit_reader.py" ]

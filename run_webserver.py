@@ -91,4 +91,5 @@ def get_items():
 
 
 if __name__ == '__main__':
+    print "Start flask server"
     app.run(host=WEB_SERVER, port=WEB_PORT, debug=True)

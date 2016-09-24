@@ -62,6 +62,7 @@ def run_reader(db, subreddits):
 if __name__ == "__main__":
     subreddits_list = read_json_file(JSON_PATH)
 
+    print "Start long running script"
     # connect to database and reset the last update times
     db_connection = connect_database(server=MONGO_SERVER,
                                      port=MONGO_PORT,
