@@ -51,7 +51,8 @@ def get_items_from_database(subreddit, start_time, end_time, keyword):
     for item in db.items.find(search_field)\
                         .sort("created", pymongo.DESCENDING):
         # create a dictionary with fields that will be send
-        show_item = {"created": item['created'],
+        show_item = {"id": str(item['_id']),
+                     "created": item['created'],
                      "type": item['type']}
         if item['type'] == 'comment':
             show_item['comment'] = item['comment']
