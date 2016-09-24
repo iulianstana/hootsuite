@@ -47,18 +47,21 @@ def get_items_from_database(subreddit, start_time, end_time, keyword):
     if keyword:
         search_field["$or"] = [{"title": {"$regex": keyword}},
                                {"comment": {"$regex": keyword}}]
-
-    for item in db.items.find(search_field)\
-                        .sort("created", pymongo.DESCENDING):
-        # create a dictionary with fields that will be send
-        show_item = {"id": str(item['_id']),
-                     "created": item['created'],
-                     "type": item['type']}
-        if item['type'] == 'comment':
-            show_item['comment'] = item['comment']
-        elif item['type'] == 'submission':
-            show_item['title'] = item['title']
-        items.append(show_item)
+    try:
+        for item in db.items.find(search_field)\
+                            .sort("created", pymongo.DESCENDING):
+            # create a dictionary with fields that will be send
+            show_item = {"id": str(item['_id']),
+                         "created": item['created'],
+                         "type": item['type']}
+            if item['type'] == 'comment':
+                show_item['comment'] = item['comment']
+            elif item['type'] == 'submission':
+                show_item['title'] = item['title']
+            items.append(show_item)
+    except AttributeError as exp:
+        items = {'error': 'AttributeError: %s' % exp}
+        print exp
 
     return items
 

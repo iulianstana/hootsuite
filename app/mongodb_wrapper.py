@@ -1,4 +1,5 @@
 from pymongo import MongoClient
+from pymongo.errors import ServerSelectionTimeoutError
 import time
 
 DATABASE_NAME = 'hootsuite-challenge'
@@ -13,8 +14,17 @@ def connect_database(server='localhost', port=27017, database_name=DATABASE_NAME
     :param database_name: name of the database in use (string)
     :return: database object
     """
-    client = MongoClient(server, port)
-    return client[database_name]
+    result = None
+    try:
+        client = MongoClient(server, port)
+        result = client[database_name]
+
+        # test server is up.
+        client.server_info()
+    except ServerSelectionTimeoutError as exp:
+        result = None
+        print "No connection %s" % exp
+    return result
 
 
 def insert_new_setting(db, subreddit, submission_t=None, comment_t=None):

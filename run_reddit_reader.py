@@ -66,7 +66,10 @@ if __name__ == "__main__":
     db_connection = connect_database(server=MONGO_SERVER,
                                      port=MONGO_PORT,
                                      database_name=DATABASE_NAME)
-    reset_subreddit_times(db_connection, subreddits_list)
+    if db_connection:
+        reset_subreddit_times(db_connection, subreddits_list)
 
-    # start periodically fetching
-    run_reader(db_connection, subreddits_list)
+        # start periodically fetching
+        run_reader(db_connection, subreddits_list)
+    else:
+        print "No database connection"
