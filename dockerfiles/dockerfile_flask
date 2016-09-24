@@ -1,0 +1,15 @@
+# use image
+FROM python:2.7
+
+# copy my code to the container
+ADD . /opt/reddit_reader
+WORKDIR /opt/reddit_reader
+
+# run configuration
+RUN pip install -r requirements-pip
+
+# expose port
+EXPOSE 5000
+
+# start app
+CMD [ "python", "./run_webserver.py" ]

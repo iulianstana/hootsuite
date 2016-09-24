@@ -1,0 +1,12 @@
+# use image
+FROM python:2.7
+
+# copy my code to the container
+ADD . /opt/reddit_reader
+WORKDIR /opt/reddit_reader
+
+# run configuration
+RUN pip install -r requirements-pip
+
+# start script
+CMD [ "python", "./run_reddit_reader.py" ]

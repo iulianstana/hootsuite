@@ -1,0 +1,22 @@
+version: "2"
+services:
+  mongo:
+    build:
+        context: .
+        dockerfile: dockerfiles/dockerfile_mongo
+    ports:
+      - "27017:27017"
+  reddit:
+    build:
+        context: .
+        dockerfile: dockerfiles/dockerfile_python
+    volumes:
+      - .:/code
+  web:
+    build:
+        context: .
+        dockerfile: dockerfiles/dockerfile_flask
+    ports:
+      - "5000:5000"
+    volumes:
+      - .:/code
