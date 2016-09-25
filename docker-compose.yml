@@ -12,6 +12,10 @@ services:
         dockerfile: dockerfiles/dockerfile_python
     volumes:
       - .:/code
+    environment:
+      MONGO_SERVER: mongo
+      MONGO_PORT: 27017
+      DATABASE_NAME: hootsuite-challenge
   web:
     build:
         context: .
@@ -20,3 +24,9 @@ services:
       - "5000:5000"
     volumes:
       - .:/code
+    environment:
+      MONGO_SERVER: mongo
+      MONGO_PORT: 27017
+      DATABASE_NAME: hootsuite-challenge
+      WEB_SERVER: 0.0.0.0
+      WEB_PORT: 5000
