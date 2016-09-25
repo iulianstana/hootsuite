@@ -71,6 +71,9 @@ if __name__ == "__main__":
                                      database_name=DATABASE_NAME)
     if db_connection:
         reset_subreddit_times(db_connection, subreddits_list)
+        index_subreddit_created = [('subreddit', 1), ('created', -1)]
+        db_connection.items.create_index(index_subreddit_created,
+                                         name="subreddit_1_created_-1")
 
         # start periodically fetching
         run_reader(db_connection, subreddits_list)

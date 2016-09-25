@@ -1,5 +1,3 @@
-import pymongo
-
 from flask import Flask, jsonify
 from flask import request
 from flask import abort
@@ -45,11 +43,11 @@ def get_items_from_database(subreddit, start_time, end_time, keyword):
                                 "$lte": end_time}
                     }
     if keyword:
-        search_field["$or"] = [{"title": {"$regex": keyword}},
-                               {"comment": {"$regex": keyword}}]
+        search_field["$or"] = [{"title": {"$regex": keyword, '$options': 'i'}},
+                               {"comment": {"$regex": keyword, '$options': 'i'}}]
     try:
         for item in db.items.find(search_field)\
-                            .sort("created", pymongo.DESCENDING):
+                            .hint('subreddit_1_created_-1'):
             # create a dictionary with fields that will be send
             show_item = {"id": str(item['_id']),
                          "created": item['created'],
