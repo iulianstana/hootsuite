@@ -1,6 +1,9 @@
 Prerequisites
 
-Need to have python2.9+ installed.
+
+Build and open locally:
+
+Need to have python2.7.9+ installed.
 MangoDB server need to be installed and opened.
 
 Install requirements for this project in a virtual environment.
@@ -9,3 +12,12 @@ Install requirements for this project in a virtual environment.
     $ source pybox/bin/activate
     # install requirements from requirements-pip
     $ pip install  -r requirements-pip
+
+
+Use Docker to start project:
+
+Install docker and docker-compose.
+Build with 'sudo docker-compose build'
+Start the container with 'sudo docker-compose up'
+
+Use docker logs to see app logging.
