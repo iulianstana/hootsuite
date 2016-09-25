@@ -19,3 +19,16 @@ the flask server and mongoDB servers are up.
 Create a flask server that exposes  a GET method for:
 
 /items/?subreddit=<subreddit>&from=<t1>&to=<t2>
+
+and
+
+/items/?subreddit=<subreddit>&from=<t1>&to=<t2>&keyword=<keyword>
+(keyword is optional)
+
+Creating indexes for mongoDB queries. Adding index for subreddit, creation time
+and text to have a faster search.
+
+Using docker to have start app. Create container for long-running script, for
+flask server and for mongoDB.
+
+Add minimal test suite that tests the functionality.
