@@ -1,5 +1,5 @@
 # Usage pip install  -r requirements-pip
-flask
-praw
-pymongo
-mock
+Flask==0.11.1
+mock==2.0.0
+praw==3.5.0
+pymongo==3.3.0
