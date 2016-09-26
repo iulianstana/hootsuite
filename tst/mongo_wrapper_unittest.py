@@ -1,5 +1,6 @@
 import unittest
 import mock
+import pymongo
 from app.mongodb_wrapper import connect_database, \
     insert_new_items, insert_new_setting
 
@@ -8,7 +9,8 @@ class TestMongoWrapper(unittest.TestCase):
 
     @mock.patch('pymongo.MongoClient.__init__')
     @mock.patch('pymongo.MongoClient.__getitem__')
-    def test_connect_database(self, mongoclient, mongo_init):
+    @mock.patch('pymongo.MongoClient.server_info')
+    def test_connect_database(self, info, mongoclient, mongo_init):
         """ see if MongoClient is called and is returning things
         """
 
@@ -23,11 +25,11 @@ class TestMongoWrapper(unittest.TestCase):
         self.assertEqual(mongoclient.call_count, 1)
 
     @mock.patch('pymongo.collection.Collection.insert_many')
-    def test_insert_new_items(self, insert_many):
+    def test_insert_new_items(self,  insert_many):
         """
         test to see if insert_many works well
         """
-        db = connect_database()
+        db = pymongo.MongoClient()['test']
 
         # call function
         result = insert_new_items(db, {'a': 1, 'b': 2})
@@ -41,7 +43,7 @@ class TestMongoWrapper(unittest.TestCase):
         """
         test to see if insert_many works well
         """
-        db = connect_database()
+        db = pymongo.MongoClient()['test']
 
         # call function
         result = insert_new_setting(db, 'python', 1000, 2000)

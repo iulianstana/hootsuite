@@ -129,12 +129,13 @@ class TestRedditWrapper(unittest.TestCase):
         # see results
         self.assertEqual(len(comments), 0)
 
+    @mock.patch('app.mongodb_wrapper.connect_database')
     @mock.patch('app.mongodb_wrapper.get_reddit_time')
     @mock.patch('praw.objects.Subreddit.get_new')
     @mock.patch('praw.Reddit.get_comments')
     @mock.patch('app.mongodb_wrapper.insert_new_items')
     def test_save_reddit_data(self, insert_items, get_comments, get_new,
-                              get_reddit_time):
+                              get_reddit_time, connection):
         """
         Test to see if insert_new_items function is called correct
         """
@@ -163,13 +164,15 @@ class TestRedditWrapper(unittest.TestCase):
         comment_items = insert_items.call_args_list[1][0][1]
         self.assertEqual(len(comment_items), 3)
 
+    @mock.patch('app.mongodb_wrapper.connect_database')
     @mock.patch('app.mongodb_wrapper.update_reddit_time')
     @mock.patch('app.mongodb_wrapper.get_reddit_time')
     @mock.patch('praw.objects.Subreddit.get_new')
     @mock.patch('praw.Reddit.get_comments')
     @mock.patch('app.mongodb_wrapper.insert_new_items')
     def test_save_reddit_data_reddit_time(self, insert_items, get_comments,
-                                          get_new, get_reddit_t, update_t):
+                                          get_new, get_reddit_t, update_t,
+                                          connection):
         """
         Test to see if insert_new_items function is called correct
         and also time_database works correct
