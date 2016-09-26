@@ -138,6 +138,9 @@ class TestRedditWrapper(unittest.TestCase):
                               get_reddit_time, connection):
         """
         Test to see if insert_new_items function is called correct
+
+        Use a time_frame defined by me. No need to get dynamic setting
+        data.
         """
         # initialize reddit_obj
         reddit_obj = RedditWrapper('python', self.time_frame)
@@ -175,7 +178,8 @@ class TestRedditWrapper(unittest.TestCase):
                                           connection):
         """
         Test to see if insert_new_items function is called correct
-        and also time_database works correct
+        and also time_database works correct.
+        Get dynamic setting data (last set time for submissions and comments).
         """
         # initialize reddit_obj
         reddit_obj = RedditWrapper('python')
