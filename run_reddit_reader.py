@@ -53,7 +53,9 @@ def run_reader(db, subreddits):
             time.sleep(WAIT_TIME)
 
             for subreddit in subreddits:
-                print "[%s] Start fetching ... '%s'" % (datetime.datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S"),
+                time_now = datetime.datetime.utcnow()\
+                                   .strftime("%Y-%m-%d %H:%M:%S")
+                print "[%s] Start fetching ... '%s'" % (time_now,
                                                         subreddit)
                 reddit = RedditWrapper(subreddit, db=db)
                 reddit.save_subreddit_data()
