@@ -10,12 +10,12 @@ class RedditWrapper:
     def __init__(self, subreddit, time_period=None, db=None):
         """
         Initialize a new object that will manage subreddit submissions
-        and comments. Fetch them from reddit and print them to stdout.
+        and comments. Fetch them from reddit.
 
         :param subreddit: subreddit name (string)
         :param time_period: time of last created new submissions/comments
                             (integer, time in seconds)
-        :param db: add database fo less database connections
+        :param db: add database for less database connections
         """
         self.reddit_obj = praw.Reddit(user_agent="Hootsuite challenge")
 
@@ -49,7 +49,7 @@ class RedditWrapper:
                     'subreddit': self.subreddit
                 })
         except praw.errors.InvalidSubreddit:
-            print "no results"
+            print "Invalid Subreddit: no results"
         return new_submissions
 
     def fetch_comments(self):
@@ -72,7 +72,7 @@ class RedditWrapper:
                     'subreddit': self.subreddit
                 })
         except praw.errors.InvalidSubreddit:
-            print "no results"
+            print "Invalid Subreddit: no results"
         return new_comments
 
     def print_subreddit_data(self):
