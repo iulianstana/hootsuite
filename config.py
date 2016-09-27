@@ -20,7 +20,6 @@ def get_environment_var(env_name, default_value):
 JSON_PATH = "app/subreddits.json"
 WAIT_TIME = int(get_environment_var('LONG_SCRIPT_WAIT', 300))
 
-
 # mongo configuration
 MONGO_SERVER = get_environment_var('MONGO_SERVER', "0.0.0.0")
 MONGO_PORT = int(get_environment_var('MONGO_PORT', 27017))
