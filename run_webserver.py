@@ -20,6 +20,24 @@ def not_found(error):
     return make_response(jsonify({'error': 'Not found'}), 404)
 
 
+def make_public_item(item):
+    """
+    Convert the current item into the delivered one.
+
+    :param item: database item (dictionary)
+    :return: item that will be public (dictionary)
+    """
+    new_task = {}
+    for field in item:
+        if field == 'subreddit':
+            continue
+        if field == '_id':
+            new_task['id'] = str(item['_id'])
+        else:
+            new_task[field] = item[field]
+    return new_task
+
+
 def get_items_from_database(subreddit, start_time, end_time, keyword):
     """
     Get items from database, manipulate them and pass them
@@ -48,15 +66,8 @@ def get_items_from_database(subreddit, start_time, end_time, keyword):
     try:
         for item in db.items.find(search_field)\
                             .hint('subreddit_1_created_-1'):
-            # create a dictionary with fields that will be send
-            show_item = {"id": str(item['_id']),
-                         "created": item['created'],
-                         "type": item['type']}
-            if item['type'] == 'comment':
-                show_item['comment'] = item['comment']
-            elif item['type'] == 'submission':
-                show_item['title'] = item['title']
-            items.append(show_item)
+            items.append(make_public_item(item))
+
     except AttributeError as exp:
         items = {'error': 'AttributeError: %s' % exp}
         print exp

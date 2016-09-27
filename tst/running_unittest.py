@@ -1,6 +1,9 @@
 import unittest
-import mock
 import sys
+
+import pymongo
+import mock
+
 from StringIO import StringIO
 from contextlib import contextmanager
 
@@ -28,10 +31,12 @@ class TestRunning(unittest.TestCase):
 
     @mock.patch('run_webserver.connect_database')
     def test_get_db_items_no_db_connection(self, connection):
-        """ error when not db_connection
-        """
-        connection.return_value = None
+        """ error when not db_connection """
+
         # mock methods
+        connection.return_value = None
+
+        # call function
         with captured_output() as (out, err):
             items = get_items_from_database('python', 0, 1000, None)
 
@@ -39,6 +44,45 @@ class TestRunning(unittest.TestCase):
         self.assertEqual(connection.call_count, 1)
         self.assertEqual(items, {'error': "AttributeError: 'NoneType' object has no attribute 'items'"})
 
+    @mock.patch('run_webserver.connect_database')
+    @mock.patch('pymongo.cursor.Cursor.hint')
+    def test_get_db_items(self, find, connection):
+        """ test if return value are in the correct form """
+
+        # mock methods
+        connection.return_value = pymongo.MongoClient()['test']
+        find.return_value = [{"_id": 1,
+                              "created": 1,
+                              "subreddit": 'python',
+                              "type": "comment",
+                              "comment": "new"}]
+
+        # call function
+        items = get_items_from_database('python', 0, 1000, None)
+
+        # see results
+        self.assertEqual(connection.call_count, 1)
+        # exclude subreddit and change '_id' to 'id'
+        self.assertEqual(items, [{'comment': 'new',
+                                  'created': 1,
+                                  'id': '1',
+                                  'type': 'comment'}])
+
+    @mock.patch('run_webserver.connect_database')
+    @mock.patch('pymongo.cursor.Cursor.hint')
+    def test_get_db_items_no_items(self, find, connection):
+        """ test when no items are returned """
+
+        # mock methods
+        connection.return_value = pymongo.MongoClient()['test']
+        find.return_value = []
+
+        # call function
+        items = get_items_from_database('python', 0, 1000, None)
+
+        # see results
+        self.assertEqual(connection.call_count, 1)
+        self.assertEqual(items, [])
 
 if __name__ == '__main__':
     unittest.main()
