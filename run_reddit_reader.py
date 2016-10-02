@@ -76,6 +76,11 @@ if __name__ == "__main__":
         index_subreddit_created = [('subreddit', 1), ('created', -1)]
         db_connection.items.create_index(index_subreddit_created,
                                          name="subreddit_1_created_-1")
+        db_connection.items.create_index([('subreddit', 1),
+                                          ('title', "text"),
+                                          ('comment', "text"),
+                                          ('created', -1)])
+
 
         # start periodically fetching
         run_reader(db_connection, subreddits_list)

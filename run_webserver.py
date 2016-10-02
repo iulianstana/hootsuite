@@ -61,11 +61,9 @@ def get_items_from_database(subreddit, start_time, end_time, keyword):
                                 "$lte": end_time}
                     }
     if keyword:
-        search_field["$or"] = [{"title": {"$regex": keyword, '$options': 'i'}},
-                               {"comment": {"$regex": keyword, '$options': 'i'}}]
+        search_field["$text"] = {"$search": keyword}
     try:
-        for item in db.items.find(search_field)\
-                            .hint('subreddit_1_created_-1'):
+        for item in db.items.find(search_field):
             items.append(make_public_item(item))
 
     except AttributeError as exp:
