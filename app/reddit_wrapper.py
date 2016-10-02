@@ -21,10 +21,12 @@ class RedditWrapper:
 
         if time_period:
             self.time_database = False
-            self.time_period = time.time() - time_period
+            self.end_time = time.time()
+            self.start_time = self.end_time - time_period
         else:
             self.time_database = True
-            self.time_period = None
+            self.end_time = None
+            self.start_time = None
         self.subreddit = subreddit
         self.db = db
 
@@ -40,7 +42,9 @@ class RedditWrapper:
                                             .get_new(limit=None)
 
             for submission in submission_gen:
-                if submission.created_utc < self.time_period:
+                if submission.created_utc > self.end_time:
+                    continue
+                if submission.created_utc < self.start_time:
                     break
                 new_submissions.append({
                     'created': submission.created_utc,
@@ -63,7 +67,9 @@ class RedditWrapper:
             comments_gen = self.reddit_obj.get_comments(self.subreddit)
 
             for comment in comments_gen:
-                if comment.created_utc < self.time_period:
+                if comment.created_utc > self.end_time:
+                    continue
+                if comment.created_utc < self.start_time:
                     break
                 new_comments.append({
                     'created': comment.created_utc,
@@ -94,32 +100,28 @@ class RedditWrapper:
         # get submissions and save them
         if self.time_database:
             # get last update time
-            self.time_period = mongodb_wrapper.get_reddit_time(self.db,
-                                                               self.subreddit,
-                                                               "submission")
-            # update with current time
-            mongodb_wrapper.update_reddit_time(self.db,
-                                               self.subreddit,
-                                               submission_t=time.time())
+            self.end_time = time.time()
+            self.start_time = mongodb_wrapper.get_reddit_time(self.db,
+                                                              self.subreddit)
+
         # get submissions
         items = self.fetch_submissions()
         # save in db
         mongodb_wrapper.insert_new_items(self.db, items)
 
-        # get comments and save them
-        if self.time_database:
-            # get last update time
-            self.time_period = mongodb_wrapper.get_reddit_time(self.db,
-                                                               self.subreddit,
-                                                               "comment")
-            # update with current time
-            mongodb_wrapper.update_reddit_time(self.db,
-                                               self.subreddit,
-                                               comment_t=time.time())
         # get comments
         items = self.fetch_comments()
         # save in db
         mongodb_wrapper.insert_new_items(self.db, items)
+
+        # save time
+        if self.time_database:
+            mongodb_wrapper.update_reddit_time(self.db,
+                                               self.subreddit,
+                                               self.end_time)
+        else:
+            self.start_time = self.end_time
+            self.end_time = time.time()
 
 
 if __name__ == "__main__":

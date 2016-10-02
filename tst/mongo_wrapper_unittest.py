@@ -46,19 +46,17 @@ class TestMongoWrapper(unittest.TestCase):
         db = pymongo.MongoClient()['test']
 
         # call function
-        result = insert_new_setting(db, 'python', 1000, 2000)
+        result = insert_new_setting(db, 'python', 1000)
 
         # see results
         self.assertEqual(type(result), dict)
         argument = insert_one.call_args_list[0][0][0]
         # insert_one argument values
         self.assertEqual(argument['subreddit'], 'python')
-        self.assertEqual(argument['times']['submission'], 1000)
-        self.assertEqual(argument['times']['comment'], 2000)
+        self.assertEqual(argument['times'], 1000)
         # result values
         self.assertEqual(result['subreddit'], 'python')
-        self.assertEqual(result['times']['submission'], 1000)
-        self.assertEqual(result['times']['comment'], 2000)
+        self.assertEqual(result['times'], 1000)
 
 
 if __name__ == '__main__':

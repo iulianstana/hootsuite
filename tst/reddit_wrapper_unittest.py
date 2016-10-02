@@ -54,7 +54,7 @@ class TestRedditWrapper(unittest.TestCase):
         # test to see if time_database and time_period
         # are seated correct
         self.assertFalse(reddit_obj.time_database)
-        self.assertTrue(reddit_obj.time_period)
+        self.assertTrue(reddit_obj.start_time)
 
         # database was not provided
         self.assertEqual(reddit_obj.db, None)
@@ -195,8 +195,8 @@ class TestRedditWrapper(unittest.TestCase):
         # see results
         self.assertEqual(get_new.call_count, 1)
         self.assertEqual(get_comments.call_count, 1)
-        self.assertEqual(get_reddit_t.call_count, 2)
-        self.assertEqual(update_t.call_count, 2)
+        self.assertEqual(get_reddit_t.call_count, 1)
+        self.assertEqual(update_t.call_count, 1)
         # two insertion had been made
         self.assertEqual(insert_items.call_count, 2)
 
